@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Location Permission Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
+    padding: 20px;
+  }
+  .box {
+    max-width: 420px;
+    margin: auto;
+    background: #020617;
+    padding: 20px;
+    border-radius: 12px;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: #2563eb;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+  }
+  pre {
+    background: #020617;
+    padding: 10px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    margin-top: 15px;
+  }
+</style>
+</head>
+
+<body>
+<div class="box">
+  <h2>Location Access Required</h2>
+  <p>Click the button below and allow location access.</p>
+
+  <button onclick="getLocation()">Allow Location</button>
+
+  <pre id="output">Waiting for permission...</pre>
+</div>
+
+<script>
+function getLocation() {
+  if (!navigator.geolocation) {
+    document.getElementById("output").innerText =
+      "Geolocation not supported.";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(success, error, {
+    enableHighAccuracy: true,
+    timeout: 10000
+  });
+}
+
+function success(pos) {
+  const data = `
+Latitude   : ${pos.coords.latitude}
+Longitude  : ${pos.coords.longitude}
+Accuracy   : ${pos.coords.accuracy} meters
+Timestamp  : ${new Date(pos.timestamp)}
+
+Browser    : ${navigator.userAgent}
+Platform   : ${navigator.platform}
+  `;
+  document.getElementById("output").innerText = data;
+}
+
+function error(err) {
+  document.getElementById("output").innerText =
+    "Permission denied or error occurred.";
+}
+</script>
+</body>
+</html>
